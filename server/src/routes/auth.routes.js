@@ -1,0 +1,61 @@
+const express = require('express');
+const passport = require('passport');
+const authController = require('../controllers/auth.controller');
+const { validateRegister, validateLogin } = require('../validators/auth.validator');
+const { protect } = require('../middlewares/auth');
+
+const router = express.Router();
+
+/**
+ * @route   POST /api/v1/auth/register
+ * @desc    Register new user
+ * @access  Public
+ */
+router.post('/register', validateRegister, authController.register);
+
+/**
+ * @route   POST /api/v1/auth/login
+ * @desc    Login user
+ * @access  Public
+ */
+router.post('/login', validateLogin, authController.login);
+
+/**
+ * @route   GET /api/v1/auth/me
+ * @desc    Get current user
+ * @access  Private
+ */
+router.get('/me', protect, authController.getMe);
+
+/**
+ * @route   POST /api/v1/auth/logout
+ * @desc    Logout user
+ * @access  Private
+ */
+router.post('/logout', protect, authController.logout);
+
+/**
+ * @route   PUT /api/v1/auth/password
+ * @desc    Update password
+ * @access  Private
+ */
+router.put('/password', protect, authController.updatePassword);
+
+/**
+ * @route   GET /api/v1/auth/google
+ * @desc    Initiate Google OAuth
+ * @access  Public
+ */
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+/**
+ * @route   GET /api/v1/auth/google/callback
+ * @desc    Google OAuth callback
+ * @access  Public
+ */
+router.get('/google/callback', 
+  passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
+  authController.googleCallback
+);
+
+module.exports = router;

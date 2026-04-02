@@ -1,0 +1,10 @@
+.follow-btn {
+  min-width: 100px;
+  transition: all 0.2s ease;
+}
+
+.follow-btn--following:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  color: rgb(255, 255, 255) !important;
+}

@@ -1,0 +1,81 @@
+.feed {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.feed__header {
+  margin-bottom: 24px;
+}
+
+.feed__header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-primary-text);
+  margin: 0 0 4px;
+}
+
+.feed__header p {
+  color: var(--color-secondary-text);
+  margin: 0;
+}
+
+.feed__error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.feed__error p {
+  color: #ef4444;
+  margin: 0 0 12px;
+}
+
+.feed__posts {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed__loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.feed__empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px var(--color-shadow);
+}
+
+.feed__empty h3 {
+  color: var(--color-primary-text);
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.feed__empty p {
+  color: var(--color-secondary-text);
+  margin: 0;
+}
+
+.feed__load-more {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.feed__end {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--color-secondary-text);
+  font-size: 14px;
+}
+
+.feed__end p {
+  margin: 0;
+}

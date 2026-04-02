@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevConnect API Tester</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+    }
+    h1 { text-align: center; margin-bottom: 10px; color: #00d9ff; }
+    h3 { text-align: center; margin-bottom: 20px; color: #888; font-weight: normal; }
+    .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover, .tab-btn.active { background: #00d9ff; color: #000; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+    .card.full-width { grid-column: 1 / -1; }
+    .card h2 { color: #00d9ff; margin-bottom: 15px; font-size: 18px; }
+    .form-group { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 5px; font-size: 14px; color: #aaa; }
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+    input:focus, textarea:focus { outline: none; border-color: #00d9ff; }
+    button {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #00d9ff 0%, #0099cc 100%);
+      border: none;
+      border-radius: 6px;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: scale(1.02); }
+    button.secondary { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    button.danger { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: #fff; }
+    button.small { padding: 8px 16px; font-size: 12px; margin: 5px; }
+    .response-box {
+      background: #0d0d1a;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .response-box pre {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .success { color: #4ade80; }
+    .error { color: #f87171; }
+    .token-display {
+      background: #1a1a2e;
+      padding: 10px;
+      border-radius: 6px;
+      margin: 15px 0;
+      word-break: break-all;
+      font-size: 11px;
+      color: #facc15;
+      text-align: center;
+    }
+    .status-bar {
+      text-align: center;
+      padding: 10px;
+      background: rgba(0,217,255,0.1);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .status-bar.connected { background: rgba(74,222,128,0.2); }
+    .status-bar.disconnected { background: rgba(248,113,113,0.2); }
+    .user-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-info h4 { color: #00d9ff; margin-bottom: 5px; }
+    .user-info p { color: #888; font-size: 12px; }
+    .skills-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+    .skill-tag { background: #6366f1; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
+    @media (max-width: 768px) {
+      .container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 DevConnect API Tester</h1>
+  <h3>Test Auth, Users, Profiles, Posts & Follow System</h3>
+  
+  <div id="statusBar" class="status-bar">Checking server connection...</div>
+  
+  <div style="text-align: center; margin-bottom: 10px;">
+    <strong>Current Token:</strong>
+    <div id="tokenDisplay" class="token-display">No token yet. Register or Login first.</div>
+    <div id="currentUser" style="color: #4ade80; font-size: 14px;"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="auth">🔐 Auth</button>
+    <button class="tab-btn" data-tab="profile">👤 Profile</button>
+    <button class="tab-btn" data-tab="posts">📝 Posts</button>
+    <button class="tab-btn" data-tab="search">🔍 Search</button>
+    <button class="tab-btn" data-tab="follow">👥 Follow</button>
+    <button class="tab-btn" data-tab="health">💚 Health</button>
+  </div>
+
+  <!-- Auth Tab -->
+  <div id="auth" class="tab-content active">
+    <div class="container">
+      <div class="card">
+        <h2>📝 Register</h2>
+        <form id="registerForm">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="regName" value="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="regEmail" value="john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" value="password123" required>
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="regConfirmPassword" value="password123" required>
+          </div>
+          <button type="submit">Register</button>
+        </form>
+        <div class="response-box"><pre id="registerResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>🔐 Login</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" value="john@example.com" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" value="password123" required>
+          </div>
+          <button type="submit">Login</button>
+        </form>
+        <div class="response-box"><pre id="loginResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>👤 Get Current User</h2>
+        <button id="getMeBtn">Get My Profile</button>
+        <div class="response-box"><pre id="getMeResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>🚪 Logout</h2>
+        <button id="logoutBtn" class="danger">Logout</button>
+        <div class="response-box"><pre id="logoutResponse">Response will appear here...</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Tab -->
+  <div id="profile" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h2>✏️ Update My Profile</h2>
+        <form id="updateProfileForm">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="updateName" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea id="updateBio" placeholder="Tell us about yourself..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Skills (comma separated)</label>
+            <input type="text" id="updateSkills" placeholder="javascript, react, node.js">
+          </div>
+          <div class="form-group">
+            <label>GitHub Username</label>
+            <input type="text" id="updateGithub" placeholder="username">
+          </div>
+          <div class="form-group">
+            <label>Twitter Handle</label>
+            <input type="text" id="updateTwitter" placeholder="handle">
+          </div>
+          <button type="submit">Update Profile</button>
+        </form>
+        <div class="response-box"><pre id="updateProfileResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>🔎 Get User By ID</h2>
+        <div class="form-group">
+          <label>User ID</label>
+          <input type="text" id="getUserId" placeholder="Enter user ID">
+        </div>
+        <button id="getUserBtn">Get User</button>
+        <div class="response-box"><pre id="getUserResponse">Response will appear here...</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posts Tab -->
+  <div id="posts" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h2>✏️ Create Post</h2>
+        <div class="form-group">
+          <label>Post Text</label>
+          <textarea id="postText" rows="3" placeholder="What's on your mind?"></textarea>
+        </div>
+        <button id="createPostBtn">Create Post</button>
+        <div class="response-box"><pre id="createPostResponse">Response will appear here...</pre></div>
+      </div>
+      
+      <div class="card">
+        <h2>📄 Get Single Post</h2>
+        <div class="form-group">
+          <label>Post ID</label>
+          <input type="text" id="singlePostId" placeholder="Enter post ID">
+        </div>
+        <button id="getPostBtn">Get Post</button>
+        <div class="response-box"><pre id="singlePostResponse">Response will appear here...</pre></div>
+      </div>
+      
+      <div class="card">
+        <h2>✏️ Update Post</h2>
+        <div class="form-group">
+          <label>Post ID</label>
+          <input type="text" id="updatePostId" placeholder="Enter post ID">
+        </div>
+        <div class="form-group">
+          <label>New Text</label>
+          <textarea id="updatePostText" rows="2" placeholder="Updated text..."></textarea>
+        </div>
+        <button id="updatePostBtn">Update Post</button>
+        <div class="response-box"><pre id="updatePostResponse">Response will appear here...</pre></div>
+      </div>
+      
+      <div class="card">
+        <h2>🗑️ Delete Post</h2>
+        <div class="form-group">
+          <label>Post ID</label>
+          <input type="text" id="deletePostId" placeholder="Enter post ID to delete">
+        </div>
+        <button id="deletePostBtn" style="background: #dc2626;">Delete Post</button>
+        <div class="response-box"><pre id="deletePostResponse">Response will appear here...</pre></div>
+      </div>
+      
+      <div class="card full-width">
+        <h2>📰 Feed / My Posts</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+          <div class="form-group" style="width: 100px;">
+            <label>Page</label>
+            <input type="number" id="feedPage" value="1" min="1">
+          </div>
+          <div class="form-group" style="width: 100px;">
+            <label>Limit</label>
+            <input type="number" id="feedLimit" value="10" min="1" max="50">
+          </div>
+          <div class="form-group" style="width: 150px;">
+            <label>Sort By</label>
+            <select id="feedSort">
+              <option value="-createdAt">Newest</option>
+              <option value="createdAt">Oldest</option>
+              <option value="-likeCount">Most Liked</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="getFeedBtn">Get All Posts</button>
+          <button id="getMyPostsBtn">Get My Posts</button>
+        </div>
+        <div class="response-box"><pre id="feedResponse">Response will appear here...</pre></div>
+        <div id="feedResults"></div>
+      </div>
+      
+      <div class="card">
+        <h2>❤️ Like / Unlike Post</h2>
+        <div class="form-group">
+          <label>Post ID</label>
+          <input type="text" id="likePostId" placeholder="Enter post ID">
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button id="likeBtn">Like</button>
+          <button id="unlikeBtn" style="background: #666;">Unlike</button>
+          <button id="toggleLikeBtn" style="background: #9333ea;">Toggle</button>
+        </div>
+        <button id="getLikesBtn" style="margin-top: 10px; background: #0891b2;">Get Likes List</button>
+        <div class="response-box"><pre id="likeResponse">Response will appear here...</pre></div>
+      </div>
+      
+      <div class="card">
+        <h2>💬 Comments</h2>
+        <div class="form-group">
+          <label>Post ID</label>
+          <input type="text" id="commentPostId" placeholder="Enter post ID">
+        </div>
+        <div class="form-group">
+          <label>Comment Text</label>
+          <textarea id="commentText" rows="2" placeholder="Write a comment..."></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+          <button id="addCommentBtn">Add Comment</button>
+          <button id="getCommentsBtn" style="background: #0891b2;">Get Comments</button>
+        </div>
+        <div class="form-group">
+          <label>Comment ID (for delete)</label>
+          <input type="text" id="deleteCommentId" placeholder="Enter comment ID to delete">
+        </div>
+        <button id="deleteCommentBtn" style="background: #dc2626;">Delete Comment</button>
+        <div class="response-box"><pre id="commentResponse">Response will appear here...</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Tab -->
+  <div id="search" class="tab-content">
+    <div class="container">
+      <div class="card full-width">
+        <h2>🔍 Search Users</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <div class="form-group" style="flex: 1; min-width: 200px;">
+            <label>Search Query (name)</label>
+            <input type="text" id="searchQuery" placeholder="Search by name...">
+          </div>
+          <div class="form-group" style="flex: 1; min-width: 200px;">
+            <label>Skills Filter</label>
+            <input type="text" id="searchSkills" placeholder="Filter by skills...">
+          </div>
+          <div class="form-group" style="width: 100px;">
+            <label>Page</label>
+            <input type="number" id="searchPage" value="1" min="1">
+          </div>
+          <div class="form-group" style="width: 100px;">
+            <label>Limit</label>
+            <input type="number" id="searchLimit" value="10" min="1" max="50">
+          </div>
+        </div>
+        <button id="searchBtn">Search Users</button>
+        <div class="response-box"><pre id="searchResponse">Response will appear here...</pre></div>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Follow Tab -->
+  <div id="follow" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h2>➕ Follow User</h2>
+        <div class="form-group">
+          <label>User ID to Follow</label>
+          <input type="text" id="followUserId" placeholder="Enter user ID">
+        </div>
+        <button id="followBtn" class="secondary">Follow</button>
+        <div class="response-box"><pre id="followResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>➖ Unfollow User</h2>
+        <div class="form-group">
+          <label>User ID to Unfollow</label>
+          <input type="text" id="unfollowUserId" placeholder="Enter user ID">
+        </div>
+        <button id="unfollowBtn" class="danger">Unfollow</button>
+        <div class="response-box"><pre id="unfollowResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>👥 Get Followers</h2>
+        <div class="form-group">
+          <label>User ID</label>
+          <input type="text" id="followersUserId" placeholder="Enter user ID">
+        </div>
+        <button id="getFollowersBtn">Get Followers</button>
+        <div class="response-box"><pre id="followersResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>👤 Get Following</h2>
+        <div class="form-group">
+          <label>User ID</label>
+          <input type="text" id="followingUserId" placeholder="Enter user ID">
+        </div>
+        <button id="getFollowingBtn">Get Following</button>
+        <div class="response-box"><pre id="followingResponse">Response will appear here...</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Health Tab -->
+  <div id="health" class="tab-content">
+    <div class="container">
+      <div class="card">
+        <h2>💚 Health Check</h2>
+        <button id="healthBtn">Check Health</button>
+        <div class="response-box"><pre id="healthResponse">Response will appear here...</pre></div>
+      </div>
+
+      <div class="card">
+        <h2>🔒 Test Protected Route (No Token)</h2>
+        <button id="testNoTokenBtn">Test Without Token</button>
+        <div class="response-box"><pre id="testNoTokenResponse">Response will appear here...</pre></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000/api/v1';
+    let authToken = localStorage.getItem('devconnect_token') || '';
+    let currentUserId = localStorage.getItem('devconnect_userId') || '';
+
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function updateTokenDisplay() {
+      const display = document.getElementById('tokenDisplay');
+      const userDisplay = document.getElementById('currentUser');
+      if (authToken) {
+        display.textContent = authToken.substring(0, 50) + '...';
+        display.style.color = '#4ade80';
+        userDisplay.textContent = `User ID: ${currentUserId}`;
+      } else {
+        display.textContent = 'No token yet. Register or Login first.';
+        display.style.color = '#facc15';
+        userDisplay.textContent = '';
+      }
+    }
+
+    function formatResponse(data, isError = false) {
+      return `<span class="${isError ? 'error' : 'success'}">${JSON.stringify(data, null, 2)}</span>`;
+    }
+
+    async function apiCall(endpoint, options = {}) {
+      try {
+        const headers = { 'Content-Type': 'application/json', ...options.headers };
+        if (authToken && !options.noAuth) headers['Authorization'] = `Bearer ${authToken}`;
+        const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+        const data = await response.json();
+        return { data, ok: response.ok };
+      } catch (error) {
+        return { data: { success: false, message: error.message }, ok: false };
+      }
+    }
+
+    async function checkServer() {
+      const statusBar = document.getElementById('statusBar');
+      const { data, ok } = await apiCall('/health');
+      statusBar.textContent = ok ? '✅ Server Connected - ' + data.data.status : '❌ Server Not Connected';
+      statusBar.className = 'status-bar ' + (ok ? 'connected' : 'disconnected');
+    }
+
+    // Auth handlers
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { data, ok } = await apiCall('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: document.getElementById('regName').value,
+          email: document.getElementById('regEmail').value,
+          password: document.getElementById('regPassword').value,
+          confirmPassword: document.getElementById('regConfirmPassword').value
+        })
+      });
+      document.getElementById('registerResponse').innerHTML = formatResponse(data, !ok);
+      if (ok && data.data?.token) {
+        authToken = data.data.token;
+        currentUserId = data.data.user.id;
+        localStorage.setItem('devconnect_token', authToken);
+        localStorage.setItem('devconnect_userId', currentUserId);
+        updateTokenDisplay();
+      }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { data, ok } = await apiCall('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: document.getElementById('loginEmail').value,
+          password: document.getElementById('loginPassword').value
+        })
+      });
+      document.getElementById('loginResponse').innerHTML = formatResponse(data, !ok);
+      if (ok && data.data?.token) {
+        authToken = data.data.token;
+        currentUserId = data.data.user.id;
+        localStorage.setItem('devconnect_token', authToken);
+        localStorage.setItem('devconnect_userId', currentUserId);
+        updateTokenDisplay();
+      }
+    });
+
+    document.getElementById('getMeBtn').addEventListener('click', async () => {
+      const { data, ok } = await apiCall('/auth/me');
+      document.getElementById('getMeResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      const { data, ok } = await apiCall('/auth/logout', { method: 'POST' });
+      document.getElementById('logoutResponse').innerHTML = formatResponse(data, !ok);
+      if (ok) {
+        authToken = '';
+        currentUserId = '';
+        localStorage.removeItem('devconnect_token');
+        localStorage.removeItem('devconnect_userId');
+        updateTokenDisplay();
+      }
+    });
+
+    // Profile handlers
+    document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = {};
+      const name = document.getElementById('updateName').value;
+      const bio = document.getElementById('updateBio').value;
+      const skills = document.getElementById('updateSkills').value;
+      const github = document.getElementById('updateGithub').value;
+      const twitter = document.getElementById('updateTwitter').value;
+      
+      if (name) body.name = name;
+      if (bio) body.bio = bio;
+      if (skills) body.skills = skills.split(',').map(s => s.trim()).filter(s => s);
+      if (github || twitter) {
+        body.socialLinks = {};
+        if (github) body.socialLinks.github = github;
+        if (twitter) body.socialLinks.twitter = twitter;
+      }
+
+      const { data, ok } = await apiCall('/users/me', { method: 'PUT', body: JSON.stringify(body) });
+      document.getElementById('updateProfileResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('getUserBtn').addEventListener('click', async () => {
+      const userId = document.getElementById('getUserId').value;
+      if (!userId) return alert('Please enter a user ID');
+      const { data, ok } = await apiCall(`/users/${userId}`);
+      document.getElementById('getUserResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    // Search handlers
+    document.getElementById('searchBtn').addEventListener('click', async () => {
+      const q = document.getElementById('searchQuery').value;
+      const skills = document.getElementById('searchSkills').value;
+      const page = document.getElementById('searchPage').value;
+      const limit = document.getElementById('searchLimit').value;
+      
+      const params = new URLSearchParams();
+      if (q) params.append('q', q);
+      if (skills) params.append('skills', skills);
+      params.append('page', page);
+      params.append('limit', limit);
+
+      const { data, ok } = await apiCall(`/users/search?${params}`);
+      document.getElementById('searchResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    // Follow handlers
+    document.getElementById('followBtn').addEventListener('click', async () => {
+      const userId = document.getElementById('followUserId').value;
+      if (!userId) return alert('Please enter a user ID');
+      const { data, ok } = await apiCall(`/users/${userId}/follow`, { method: 'POST' });
+      document.getElementById('followResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('unfollowBtn').addEventListener('click', async () => {
+      const userId = document.getElementById('unfollowUserId').value;
+      if (!userId) return alert('Please enter a user ID');
+      const { data, ok } = await apiCall(`/users/${userId}/follow`, { method: 'DELETE' });
+      document.getElementById('unfollowResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('getFollowersBtn').addEventListener('click', async () => {
+      const userId = document.getElementById('followersUserId').value;
+      if (!userId) return alert('Please enter a user ID');
+      const { data, ok } = await apiCall(`/users/${userId}/followers`);
+      document.getElementById('followersResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('getFollowingBtn').addEventListener('click', async () => {
+      const userId = document.getElementById('followingUserId').value;
+      if (!userId) return alert('Please enter a user ID');
+      const { data, ok } = await apiCall(`/users/${userId}/following`);
+      document.getElementById('followingResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    // Posts handlers
+    document.getElementById('createPostBtn').addEventListener('click', async () => {
+      const text = document.getElementById('postText').value;
+      if (!text.trim()) return alert('Please enter post text');
+      const { data, ok } = await apiCall('/posts', { method: 'POST', body: JSON.stringify({ text }) });
+      document.getElementById('createPostResponse').innerHTML = formatResponse(data, !ok);
+      if (ok) document.getElementById('postText').value = '';
+    });
+
+    document.getElementById('getPostBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('singlePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}`);
+      document.getElementById('singlePostResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('updatePostBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('updatePostId').value;
+      const text = document.getElementById('updatePostText').value;
+      if (!postId) return alert('Please enter a post ID');
+      if (!text.trim()) return alert('Please enter new text');
+      const { data, ok } = await apiCall(`/posts/${postId}`, { method: 'PUT', body: JSON.stringify({ text }) });
+      document.getElementById('updatePostResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('deletePostBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('deletePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      if (!confirm('Are you sure you want to delete this post?')) return;
+      const { data, ok } = await apiCall(`/posts/${postId}`, { method: 'DELETE' });
+      document.getElementById('deletePostResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('getFeedBtn').addEventListener('click', async () => {
+      const page = document.getElementById('feedPage').value;
+      const limit = document.getElementById('feedLimit').value;
+      const sort = document.getElementById('feedSort').value;
+      const { data, ok } = await apiCall(`/posts?page=${page}&limit=${limit}&sort=${sort}`);
+      document.getElementById('feedResponse').innerHTML = formatResponse(data, !ok);
+      renderFeedResults(data);
+    });
+
+    document.getElementById('getMyPostsBtn').addEventListener('click', async () => {
+      const page = document.getElementById('feedPage').value;
+      const limit = document.getElementById('feedLimit').value;
+      const { data, ok } = await apiCall(`/posts/me?page=${page}&limit=${limit}`);
+      document.getElementById('feedResponse').innerHTML = formatResponse(data, !ok);
+      renderFeedResults(data);
+    });
+
+    function renderFeedResults(data) {
+      const container = document.getElementById('feedResults');
+      if (!data.success || !data.data?.posts?.length) {
+        container.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No posts found</div>';
+        return;
+      }
+      container.innerHTML = data.data.posts.map(post => `
+        <div class="user-card" style="display: block;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <strong style="color:#00d9ff;">${post.author?.name || 'Unknown'}</strong>
+            <small style="color:#888;">${new Date(post.createdAt).toLocaleString()}</small>
+          </div>
+          <p style="margin-bottom: 10px;">${post.text}</p>
+          <div style="display: flex; gap: 15px; color: #888; font-size: 12px;">
+            <span style="cursor:pointer;" onclick="document.getElementById('likePostId').value='${post.id}';document.getElementById('commentPostId').value='${post.id}';">
+              ${post.isLiked ? '❤️' : '🤍'} ${post.likeCount || 0} likes
+            </span>
+            <span>💬 ${post.commentsCount || 0} comments</span>
+            ${post.isEdited ? '<span style="color:#facc15;">✏️ edited</span>' : ''}
+            <span style="color:#666;">ID: ${post.id}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Engagement handlers - Likes
+    document.getElementById('likeBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('likePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}/like`, { method: 'POST' });
+      document.getElementById('likeResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('unlikeBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('likePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}/like`, { method: 'DELETE' });
+      document.getElementById('likeResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('toggleLikeBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('likePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}/like/toggle`, { method: 'POST' });
+      document.getElementById('likeResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('getLikesBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('likePostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}/likes`);
+      document.getElementById('likeResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    // Engagement handlers - Comments
+    document.getElementById('addCommentBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('commentPostId').value;
+      const text = document.getElementById('commentText').value;
+      if (!postId) return alert('Please enter a post ID');
+      if (!text.trim()) return alert('Please enter comment text');
+      const { data, ok } = await apiCall(`/posts/${postId}/comments`, { 
+        method: 'POST', 
+        body: JSON.stringify({ text }) 
+      });
+      document.getElementById('commentResponse').innerHTML = formatResponse(data, !ok);
+      if (ok) document.getElementById('commentText').value = '';
+    });
+
+    document.getElementById('getCommentsBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('commentPostId').value;
+      if (!postId) return alert('Please enter a post ID');
+      const { data, ok } = await apiCall(`/posts/${postId}/comments`);
+      document.getElementById('commentResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('deleteCommentBtn').addEventListener('click', async () => {
+      const postId = document.getElementById('commentPostId').value;
+      const commentId = document.getElementById('deleteCommentId').value;
+      if (!postId) return alert('Please enter a post ID');
+      if (!commentId) return alert('Please enter a comment ID');
+      if (!confirm('Are you sure you want to delete this comment?')) return;
+      const { data, ok } = await apiCall(`/posts/${postId}/comments/${commentId}`, { method: 'DELETE' });
+      document.getElementById('commentResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    // Health handlers
+    document.getElementById('healthBtn').addEventListener('click', async () => {
+      const { data, ok } = await apiCall('/health');
+      document.getElementById('healthResponse').innerHTML = formatResponse(data, !ok);
+    });
+
+    document.getElementById('testNoTokenBtn').addEventListener('click', async () => {
+      const response = await fetch(`${API_BASE}/auth/me`);
+      const data = await response.json();
+      document.getElementById('testNoTokenResponse').innerHTML = formatResponse(data, !response.ok);
+    });
+
+    updateTokenDisplay();
+    checkServer();
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+.comment-section {
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 12px;
+}
+
+.comment-section__form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.comment-section__input-wrapper {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.comment-section__input-wrapper .textarea {
+  flex: 1;
+  min-height: 36px;
+  resize: none;
+}
+
+.comment-section__loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.comment-section__empty {
+  text-align: center;
+  color: var(--color-secondary-text);
+  font-size: 14px;
+  padding: 20px 0;
+}
+
+.comment-section__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment {
+  display: flex;
+  gap: 10px;
+  transition: opacity 0.2s;
+}
+
+.comment--deleting {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.comment__content {
+  flex: 1;
+  background: var(--color-background);
+  border-radius: 12px;
+  padding: 10px 14px;
+  min-width: 0;
+}
+
+.comment__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.comment__author {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-primary-text);
+  text-decoration: none;
+}
+
+.comment__author:hover {
+  color: var(--color-accent);
+}
+
+.comment__date {
+  font-size: 12px;
+  color: var(--color-secondary-text);
+}
+
+.comment__delete {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--color-secondary-text);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.comment__delete:hover {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.comment__delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment__text {
+  font-size: 14px;
+  color: var(--color-primary-text);
+  line-height: 1.5;
+  margin: 0;
+  word-break: break-word;
+}
+
+.comment-section__load-more {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.comment-section__load-more:hover {
+  background: rgba(56, 178, 172, 0.1);
+}
+
+.comment-section__load-more:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

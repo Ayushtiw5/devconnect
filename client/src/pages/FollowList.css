@@ -1,0 +1,119 @@
+.follow-list {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.follow-list__card {
+  padding: 24px;
+}
+
+.follow-list__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.follow-list__back {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+}
+
+.follow-list__back:hover {
+  text-decoration: underline;
+}
+
+.follow-list__title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-primary-text);
+  margin: 0;
+}
+
+.follow-list__loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.follow-list__empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--color-secondary-text);
+}
+
+.follow-list__users {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.follow-list__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--color-background);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.follow-list__user:hover {
+  background: var(--color-border);
+}
+
+.follow-list__user-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.follow-list__user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.follow-list__user-name {
+  display: block;
+  font-weight: 500;
+  color: var(--color-primary-text);
+  transition: color 0.2s;
+}
+
+.follow-list__user-link:hover .follow-list__user-name {
+  color: var(--color-accent);
+}
+
+.follow-list__user-bio {
+  display: block;
+  font-size: 13px;
+  color: var(--color-secondary-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.follow-list__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.follow-list__pagination-info {
+  color: var(--color-secondary-text);
+  font-size: 14px;
+}

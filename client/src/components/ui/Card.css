@@ -1,0 +1,26 @@
+.card {
+  background: var(--color-surface);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px var(--color-shadow);
+}
+
+.card--padded {
+  padding: 20px;
+}
+
+.card__header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 16px;
+}
+
+.card__body {
+  /* Default body styling */
+}
+
+.card__footer {
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+  margin-top: 16px;
+}

@@ -1,0 +1,140 @@
+.notifications-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.notifications-page__card {
+  padding: 0;
+}
+
+.notifications-page__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notifications-page__header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--color-primary-text);
+}
+
+.notifications-page__error {
+  padding: 20px 24px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.notifications-page__loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.notifications-page__empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.notifications-page__empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.notifications-page__empty h3 {
+  margin: 0 0 8px;
+  color: var(--color-primary-text);
+}
+
+.notifications-page__empty p {
+  margin: 0;
+  color: var(--color-secondary-text);
+}
+
+.notifications-page__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.notifications-page__item {
+  display: flex;
+  gap: 14px;
+  padding: 18px 24px;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s;
+  align-items: flex-start;
+}
+
+.notifications-page__item:hover {
+  background: var(--color-background);
+}
+
+.notifications-page__item--unread {
+  background: rgba(56, 178, 172, 0.05);
+}
+
+.notifications-page__item--unread:hover {
+  background: rgba(56, 178, 172, 0.08);
+}
+
+.notifications-page__item-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.notifications-page__item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notifications-page__item-message {
+  margin: 0 0 6px;
+  font-size: 15px;
+  color: var(--color-primary-text);
+  line-height: 1.4;
+}
+
+.notifications-page__item-message strong {
+  color: var(--color-primary-text);
+}
+
+.notifications-page__item-preview {
+  margin: 0 0 6px;
+  font-size: 13px;
+  color: var(--color-secondary-text);
+  font-style: italic;
+}
+
+.notifications-page__item-time {
+  font-size: 13px;
+  color: var(--color-secondary-text);
+}
+
+.notifications-page__item-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.notifications-page__load-more {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.notifications-page__loading-more {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
