@@ -77,6 +77,11 @@ app.use(passport.initialize());
 // API routes
 app.use('/api', routes);
 
+// Add a root route for health check and to avoid 404 on '/'
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
+
 // 404 handler
 app.use(notFound);
 
