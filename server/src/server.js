@@ -13,14 +13,15 @@ process.on('uncaughtException', (err) => {
 connectDB();
 
 // Start server
-const server = app.listen(config.port, () => {
+const PORT = process.env.PORT || config.port;
+const server = app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════╗
 ║           DevConnect API Server                       ║
 ╠═══════════════════════════════════════════════════════╣
 ║  Environment: ${config.env.padEnd(40)}║
-║  Port:        ${String(config.port).padEnd(40)}║
-║  API URL:     http://localhost:${config.port}/api/v1${' '.repeat(18)}║
+║  Port:        ${String(PORT).padEnd(40)}║
+║  API URL:     http://localhost:${PORT}/api/v1${' '.repeat(18)}║
 ╚═══════════════════════════════════════════════════════╝
   `);
 });
