@@ -1,3 +1,4 @@
+console.log('=== DEBUG ROUTE TEST ===');
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
