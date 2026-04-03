@@ -77,6 +77,25 @@ app.use(passport.initialize());
 // API routes
 app.use('/api', routes);
 
+// Debug route to list all registered routes
+app.get('/debug/routes', (req, res) => {
+  const routes = [];
+  app._router.stack.forEach((middleware) => {
+    if (middleware.route) {
+      // routes registered directly on the app
+      routes.push(middleware.route.path);
+    } else if (middleware.name === 'router') {
+      // router middleware 
+      middleware.handle.stack.forEach((handler) => {
+        if (handler.route) {
+          routes.push(handler.route.path);
+        }
+      });
+    }
+  });
+  res.json(routes);
+});
+
 // Add a root route for health check and to avoid 404 on '/'
 app.get('/', (req, res) => {
   res.send('API is running');
