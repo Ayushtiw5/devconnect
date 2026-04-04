@@ -68,4 +68,8 @@ router.get('/test', (req, res) => {
   res.send('Auth test route is working!');
 });
 
+router.get('/google/callback/test', (req, res) => {
+  res.send('Google callback test route is working!');
+});
+
 module.exports = router;
