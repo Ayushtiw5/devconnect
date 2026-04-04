@@ -58,10 +58,13 @@ router.get('/google/callback',
   authController.googleCallback
 );
 
+// TEMP: Test Google callback route registration
+router.get('/google/callback', (req, res) => {
+  res.send('Google callback test route is working!');
+});
 
 router.get('/test', (req, res) => {
   res.send('Auth test route is working!');
 });
-
 
 module.exports = router;
