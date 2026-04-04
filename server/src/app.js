@@ -99,19 +99,28 @@ app.get('/debug/routes', (req, res) => {
 
 // Debug route under /api to list all registered routes
 app.get('/api/debug/routes', (req, res) => {
-  const routes = [];
-  app._router.stack.forEach((middleware) => {
-    if (middleware.route) {
-      routes.push(middleware.route.path);
-    } else if (middleware.name === 'router') {
-      middleware.handle.stack.forEach((handler) => {
-        if (handler.route) {
-          routes.push(handler.route.path);
-        }
-      });
+  try {
+    console.log('DEBUG: app._router:', app._router);
+    if (!app._router || !app._router.stack) {
+      return res.json({ success: false, message: 'No router stack found.' });
     }
-  });
-  res.json(routes);
+    const routes = [];
+    app._router.stack.forEach((middleware) => {
+      if (middleware.route) {
+        routes.push(middleware.route.path);
+      } else if (middleware.name === 'router' && middleware.handle.stack) {
+        middleware.handle.stack.forEach((handler) => {
+          if (handler.route) {
+            routes.push(handler.route.path);
+          }
+        });
+      }
+    });
+    res.json({ success: true, routes });
+  } catch (err) {
+    console.error('DEBUG ROUTE ERROR:', err);
+    res.json({ success: false, message: err.message });
+  }
 });
 
 // Add a root route for health check and to avoid 404 on '/'
