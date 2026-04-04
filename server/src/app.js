@@ -78,6 +78,13 @@ app.use(passport.initialize());
 // API routes
 app.use('/api', routes);
 
+
+
+//testing chatgpt
+
+app.use("/api/v1/auth",authRoutes);
+
+
 // Debug route registered immediately after app creation
 app.get('/api/debug/routes', (req, res) => {
   try {
