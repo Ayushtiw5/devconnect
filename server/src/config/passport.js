@@ -52,5 +52,6 @@ passport.use(
     }
   )
 );
+console.log('GoogleStrategy registered');
 
 module.exports = passport;
