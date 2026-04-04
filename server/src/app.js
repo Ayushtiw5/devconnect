@@ -78,54 +78,9 @@ app.use(passport.initialize());
 // API routes
 app.use('/api', routes);
 
-
-
-//testing chatgpt
-
-
-// Debug route registered immediately after app creation
-app.get('/api/debug/routes', (req, res) => {
-  try {
-    console.log('DEBUG: app._router:', app._router);
-    if (!app._router || !app._router.stack) {
-      return res.json({ success: false, message: 'No router stack found.' });
-    }
-    const routes = [];
-    app._router.stack.forEach((middleware) => {
-      if (middleware.route) {
-        routes.push(middleware.route.path);
-      } else if (middleware.name === 'router' && middleware.handle.stack) {
-        middleware.handle.stack.forEach((handler) => {
-          if (handler.route) {
-            routes.push(handler.route.path);
-          }
-        });
-      }
-    });
-    res.json({ success: true, routes });
-  } catch (err) {
-    console.error('DEBUG ROUTE ERROR:', err);
-    res.json({ success: false, message: err.message });
-  }
-});
-
-// Debug route to list all registered routes
-app.get('/debug/routes', (req, res) => {
-  const routes = [];
-  app._router.stack.forEach((middleware) => {
-    if (middleware.route) {
-      // routes registered directly on the app
-      routes.push(middleware.route.path);
-    } else if (middleware.name === 'router') {
-      // router middleware 
-      middleware.handle.stack.forEach((handler) => {
-        if (handler.route) {
-          routes.push(handler.route.path);
-        }
-      });
-    }
-  });
-  res.json(routes);
+// Simple test route to verify route registration
+app.get('/api/test', (req, res) => {
+  res.send('API test route is working!');
 });
 
 // 404 handler
