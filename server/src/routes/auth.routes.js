@@ -54,6 +54,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  * @access  Public
  */
 router.get('/google/callback',
+  (req, res, next) => { console.log('Google callback hit'); next(); },
   passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
   authController.googleCallback
 );
