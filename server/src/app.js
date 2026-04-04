@@ -1,4 +1,3 @@
-console.log('=== DEBUG ROUTE TEST ===');
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
@@ -30,10 +29,10 @@ app.use(
   })
 );
 
-// CORS configuration - allow all origins in development
+// CORS configuration
 app.use(
   cors({
-    origin: config.env === 'development' ? '*' : config.clientUrl,
+    origin: config.clientUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

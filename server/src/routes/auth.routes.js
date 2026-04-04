@@ -3,6 +3,7 @@ const passport = require('passport');
 const authController = require('../controllers/auth.controller');
 const { validateRegister, validateLogin } = require('../validators/auth.validator');
 const { protect } = require('../middlewares/auth');
+const config = require('../config');
 
 const router = express.Router();
 
@@ -55,7 +56,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  */
 router.get('/google/callback',
   (req, res, next) => { console.log('Google callback route hit'); next(); },
-  passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
+  passport.authenticate('google', { session: false, failureRedirect: `${config.clientUrl}/login?error=google_auth_failed` }),
   authController.googleCallback
 );
 

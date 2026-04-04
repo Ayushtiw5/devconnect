@@ -92,7 +92,7 @@ function Register() {
 
   const handleGoogleLogin = () => {
     // Redirect to backend Google OAuth endpoint
-    window.location.href = "https://devconnect-api-rywv.onrender.com/api/v1/auth/google";
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   return (

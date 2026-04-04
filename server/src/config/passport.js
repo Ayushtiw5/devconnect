@@ -3,10 +3,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
 const config = require('./index');
 
-// Debug: Log Google OAuth config values
-console.log('GOOGLE_CLIENT_ID:', config.google.clientId);
-console.log('GOOGLE_CLIENT_SECRET:', config.google.clientSecret);
-console.log('GOOGLE_CALLBACK_URL:', config.google.callbackUrl);
 
 passport.use(
   new GoogleStrategy(
@@ -52,6 +48,6 @@ passport.use(
     }
   )
 );
-console.log('GoogleStrategy registered');
+
 
 module.exports = passport;
