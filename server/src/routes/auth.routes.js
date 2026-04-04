@@ -53,7 +53,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  * @desc    Google OAuth callback
  * @access  Public
  */
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
   authController.googleCallback
 );
@@ -64,6 +64,7 @@ router.get('/google/callback', (req, res) => {
 });
 
 router.get('/test', (req, res) => {
+  
   res.send('Auth test route is working!');
 });
 
