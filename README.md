@@ -12,7 +12,7 @@
 ## 📸 Visual Tour
 
 <p align="center">
-  <img src="screenshots/landing_logged_in.png" width="800" alt="Landing Page">
+  <img src="./screenshots/landing_logged_in.png" width="800" alt="Landing Page">
   <br>
   <em>Personalized Landing Page - Highlighting Community Engagement</em>
 </p>
@@ -20,11 +20,11 @@
 ### 💻 Developer Experience
 | **Interactive Feed** | **Professional Profile** |
 | :---: | :---: |
-| <img src="screenshots/feed.png" width="400" alt="Developer Feed"> | <img src="screenshots/profile.png" width="400" alt="Profile Page"> |
+| <img src="./screenshots/feed.png" width="400" alt="Developer Feed"> | <img src="./screenshots/profile.png" width="400" alt="Profile Page"> |
 | **Real-time Notifications** | **Developer Discovery** |
-| <img src="screenshots/notifications.png" width="400" alt="Notifications"> | <img src="screenshots/search.png" width="400" alt="Search Page"> |
+| <img src="./screenshots/notifications.png" width="400" alt="Notifications"> | <img src="./screenshots/search.png" width="400" alt="Search Page"> |
 | **Modern Auth** | **Project Showcase** |
-| <img src="screenshots/login.png" width="400" alt="Login Page"> | <img src="screenshots/landing.png" width="400" alt="Showcase"> |
+| <img src="./screenshots/login.png" width="400" alt="Login Page"> | <img src="./screenshots/landing.png" width="400" alt="Showcase"> |
 
 ---
 
