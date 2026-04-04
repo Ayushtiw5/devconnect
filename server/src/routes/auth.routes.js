@@ -53,25 +53,9 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  * @desc    Google OAuth callback
  * @access  Public
  */
-// TEMP: Comment out the real Passport callback route
-// router.get('/google/callback',
-//   (req, res, next) => { console.log('Google callback hit'); next(); },
-//   passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
-//   authController.googleCallback
-// );
-
-// Move the test route to /google/callback
-router.get('/google/callback', (req, res) => {
-  res.send('Google callback test route is working!');
-});
-
-router.get('/test', (req, res) => {
-  
-  res.send('Auth test route is working!');
-});
-
-router.get('/google/callback/test', (req, res) => {
-  res.send('Google callback test route is working!');
-});
+router.get('/google/callback',
+  passport.authenticate('google', { session: false, failureRedirect: '/login?error=google_auth_failed' }),
+  authController.googleCallback
+);
 
 module.exports = router;
