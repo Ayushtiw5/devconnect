@@ -48,7 +48,12 @@ export const createPost = createAsyncThunk(
   'posts/createPost',
   async (postData, { rejectWithValue }) => {
     try {
-      const response = await api.post('/posts', postData);
+      const isFormData = postData instanceof FormData;
+      const config = isFormData
+        ? { headers: { 'Content-Type': undefined } }
+        : {};
+        
+      const response = await api.post('/posts', postData, config);
       return response.data.data.post;
     } catch (error) {
       return rejectWithValue(
