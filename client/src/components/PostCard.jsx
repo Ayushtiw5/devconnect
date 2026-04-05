@@ -5,6 +5,7 @@ import { updatePost, deletePost, toggleLike } from '../features/posts/postsSlice
 import { Avatar, Button, Textarea, Card } from './ui';
 import CommentSection from './CommentSection';
 import toast from 'react-hot-toast';
+import config from '../lib/config';
 import './PostCard.css';
 
 function PostCard({ post }) {
@@ -157,14 +158,14 @@ function PostCard({ post }) {
           </form>
         ) : (
           <>
-            {post.text && <p className="post-card__text">{post.text}</p>}
+     {post.text && <p className="post-card__text">{post.text}</p>}
             {post.images && post.images.length > 0 && (
               <div className={`post-card__images ${post.images.length === 1 ? 'post-card__images--single' : ''}`}>
                 <div className="post-card__images-scroll">
                   {post.images.map((image, index) => (
                     <div key={index} className="post-card__image">
                       <img 
-                        src={`http://localhost:5000${image}`} 
+                        src={`${config.serverUrl}${image}`} 
                         alt={`Post image ${index + 1}`} 
                         loading="lazy"
                       />

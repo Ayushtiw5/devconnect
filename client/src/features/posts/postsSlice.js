@@ -48,13 +48,7 @@ export const createPost = createAsyncThunk(
   'posts/createPost',
   async (postData, { rejectWithValue }) => {
     try {
-      // Check if postData is FormData (has image) or plain object
-      const isFormData = postData instanceof FormData;
-      const config = isFormData
-        ? { headers: { 'Content-Type': 'multipart/form-data' } }
-        : {};
-      
-      const response = await api.post('/posts', postData, config);
+      const response = await api.post('/posts', postData);
       return response.data.data.post;
     } catch (error) {
       return rejectWithValue(
