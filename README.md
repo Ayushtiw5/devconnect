@@ -9,7 +9,7 @@
 
 ---
 
-## 📸 Visual Tour
+##Visual Tour
 
 <p align="center">
   <img src="./screenshots/landing_logged_in.png" width="800" alt="Landing Page">
@@ -17,7 +17,7 @@
   <em>Personalized Landing Page - Highlighting Community Engagement</em>
 </p>
 
-### 💻 Developer Experience
+###Developer Experience
 | **Interactive Feed** | **Professional Profile** |
 | :---: | :---: |
 | <img src="./screenshots/feed.png" width="400" alt="Developer Feed"> | <img src="./screenshots/profile.png" width="400" alt="Profile Page"> |
@@ -28,18 +28,18 @@
 
 ---
 
-## 🏗️ System Architecture
+##System Architecture
 
 DevConnect follows a robust **decoupled architecture**, ensuring scalability and high performance.
 
-### 🎨 Frontend (The Experience)
+###Frontend (The Experience)
 - **Framework**: [React 19](https://react.dev/) for a declarative, component-based UI.
 - **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/) for predictable state containerization.
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) for a utility-first, modern aesthetic.
 - **Icons**: [Lucide React](https://lucide.dev/) for sleek, pixel-perfect iconography.
 - **Client Deployment**: Hosted on [Vercel](https://vercel.com/) for lightning-fast delivery.
 
-### ⚙️ Backend (The Engine)
+###Backend (The Engine)
 - **Runtime**: [Node.js](https://nodejs.org/) & [Express.js](https://expressjs.com/) for a performant event-driven API.
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose ODM](https://mongoosejs.com/) for flexible, document-based storage.
 - **Authentication**: Dual-layer security with [JWT](https://jwt.io/) and [Passport.js](https://www.passportjs.org/) (including **Google OAuth 2.0**).
@@ -48,7 +48,7 @@ DevConnect follows a robust **decoupled architecture**, ensuring scalability and
 
 ---
 
-## 💡 How it Works
+##How it Works
 
 1.  **Onboarding**: Users start by creating a professional account via email or their Google profile.
 2.  **Profile Building**: Developers showcase their expertise by adding skills (MERN, Python, DSA, etc.) and social links.
@@ -61,18 +61,18 @@ DevConnect follows a robust **decoupled architecture**, ensuring scalability and
 
 ---
 
-## ✨ Core Features
+##Core Features
 
-- 🔑 **Secure Authentication**: Encrypted password storage (Bcrypt) and Google Single Sign-On.
-- 📬 **Live Feed**: A dynamic, scrollable feed of the latest developer community activities.
-- 🛠️ **Skill-Based Discovery**: Advanced filtering to find developers with matching interests or expertise.
-- 🖼️ **Image Support**: Integrated image handling for customizable profiles and posts.
-- 📱 **Fully Responsive**: A "mobile-first" philosophy ensuring a great experience on any device.
-- 🚀 **Production Ready**: Optimized for speed, security, and developer-friendly maintenance.
+-**Secure Authentication**: Encrypted password storage (Bcrypt) and Google Single Sign-On.
+-**Live Feed**: A dynamic, scrollable feed of the latest developer community activities.
+-**Skill-Based Discovery**: Advanced filtering to find developers with matching interests or expertise.
+-**Image Support**: Integrated image handling for customizable profiles and posts.
+-**Fully Responsive**: A "mobile-first" philosophy ensuring a great experience on any device.
+-**Production Ready**: Optimized for speed, security, and developer-friendly maintenance.
 
 ---
 
-## 🚀 Local Development
+##Local Development
 
 ### Installation
 
@@ -99,7 +99,7 @@ DevConnect follows a robust **decoupled architecture**, ensuring scalability and
 
 ---
 
-## 👨‍💻 Author
+##Author
 
 **Ayush Tiwari** - *Full Stack Developer*
 - [GitHub](https://github.com/Ayushtiw5)
