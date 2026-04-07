@@ -1,4 +1,4 @@
-# 🚀 DevConnect - The Ultimate Developer Network
+#DevConnect - The Ultimate Developer Network
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=vercel)](https://devconnect-lake-psi.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
